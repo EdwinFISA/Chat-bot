@@ -5,31 +5,32 @@ document.addEventListener("DOMContentLoaded", function () {
     const userInput = document.getElementById("user-input");
     const sendButton = document.getElementById("send-btn");
 
-    // Paso de la conversación
+    // Variable para controlar el paso del flujo
     let step = 0;
 
-    // Respuestas del usuario
+    // Objeto para almacenar las respuestas del usuario
     let userData = {
         nombre: "",
-        gustaProgramar: false,
-        gustaAnatomia: false,
-        gustaFinanzas: false,
-        gustaMatematicas: false,
+        health: false,      // Interés en salud (Medicina)
+        tech: false,        // Interés en tecnología (Ingeniería)
+        finance: false,     // Interés en finanzas (Ciencias Económicas)
+        leadership: false,  // Interés en liderazgo (Administración de Empresas)
+        faculty: "",
+        career: "",
         presupuesto: "",
-        jornada: "",
-        carrera: "",
-        universidad: ""
+        universidad: "",
+        jornada: ""
     };
 
-    // Base de hechos o reglas simples
-    const universidades = {
-        "USAC": { costo: "bajo" },
-        "UMG": { costo: "medio" },
-        "Del Valle": { costo: "alto" },
-        "Francisco Marroquín": { costo: "alto" }
-    };
+    // Función para decidir la universidad según presupuesto
+    function decideUniversity(presupuesto) {
+        if (presupuesto === "bajo") return "USAC";
+        else if (presupuesto === "medio") return "UMG";
+        else if (presupuesto === "alto") return "Del Valle"; // O también podría ser Francisco Marroquín
+        else return "USAC";
+    }
 
-    // Mostrar mensaje del bot
+    // Función para mostrar mensajes del bot
     function botMessage(message) {
         let botMsg = document.createElement("p");
         botMsg.innerHTML = `<strong>🤖 Chatbot:</strong> ${message}`;
@@ -37,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // Mostrar mensaje del usuario
+    // Función para mostrar mensajes del usuario
     function userMessage(message) {
         let userMsg = document.createElement("p");
         userMsg.innerHTML = `<strong>👤 Tú:</strong> ${message}`;
@@ -45,136 +46,160 @@ document.addEventListener("DOMContentLoaded", function () {
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // Crear botones de opción
+    // Función para crear botones de opción
     function showOptions(options, callback) {
         optionsBox.innerHTML = ""; // Limpiar opciones anteriores
         options.forEach(option => {
-            let button = document.createElement("button");
-            button.textContent = option;
-            button.classList.add("option-btn");
-            button.addEventListener("click", function () {
+            let btn = document.createElement("button");
+            btn.textContent = option;
+            btn.classList.add("option-btn");
+            btn.addEventListener("click", function () {
                 userMessage(option);
                 callback(option);
             });
-            optionsBox.appendChild(button);
+            optionsBox.appendChild(btn);
         });
     }
 
-    // Decidir la carrera según respuestas
-    function decidirCarrera() {
-        /*
-          Lógica simple:  
-          - Si le gusta programar => Ingeniería en Sistemas
-          - Si le gusta anatomía => Medicina
-          - Si le gustan las finanzas => Ciencias Económicas
-          - Si le gustan las matemáticas => Ingeniería Civil
-          - Si no coincide nada => Administración
-        */
-        if (userData.gustaProgramar) {
-            return "Ingeniería en Sistemas";
-        } else if (userData.gustaAnatomia) {
-            return "Medicina";
-        } else if (userData.gustaFinanzas) {
-            return "Ciencias Económicas";
-        } else if (userData.gustaMatematicas) {
-            return "Ingeniería Civil";
-        } else {
-            return "Administración de Empresas";
-        }
-    }
-
-    // Decidir la universidad según presupuesto
-    function decidirUniversidad(presupuesto) {
-        /*
-          - "bajo" => USAC
-          - "medio" => UMG
-          - "alto" => Del Valle o Francisco Marroquín
-        */
-        for (let uni in universidades) {
-            if (universidades[uni].costo === presupuesto) {
-                return uni; // Devuelve la primera coincidencia
-            }
-        }
-        // Si no encontró coincidencia, por defecto USAC
-        return "USAC";
-    }
-
-    // Controla el flujo de la conversación
+    // Función que controla el flujo de la conversación
     function nextStep() {
         switch (step) {
             case 0:
-                botMessage("¡Hola! ¿Cómo te llamas?");
+                // Paso 0: Pedir el nombre
+                botMessage("¡Hola! 😊 ¿Cómo te llamas, amig@?");
                 break;
 
             case 1:
-                botMessage("¿Te gusta programar?");
-                showOptions(["Sí", "No"], (respuesta) => {
-                    userData.gustaProgramar = (respuesta === "Sí");
+                // Paso 1: Preguntar interés en salud (Medicina)
+                botMessage("¿Te interesa cuidar la salud y el bienestar? 🏥💊");
+                showOptions(["Sí", "No"], function (answer) {
+                    userData.health = (answer === "Sí");
                     step++;
                     nextStep();
                 });
                 break;
 
             case 2:
-                botMessage("¿Te interesa la anatomía y la salud?");
-                showOptions(["Sí", "No"], (respuesta) => {
-                    userData.gustaAnatomia = (respuesta === "Sí");
+                // Paso 2: Preguntar interés en tecnología (Ingeniería)
+                botMessage("¿Te gusta programar o trabajar con tecnología? 💻🤖");
+                showOptions(["Sí", "No"], function (answer) {
+                    userData.tech = (answer === "Sí");
                     step++;
                     nextStep();
                 });
                 break;
 
             case 3:
-                botMessage("¿Te gustan las finanzas y la contabilidad?");
-                showOptions(["Sí", "No"], (respuesta) => {
-                    userData.gustaFinanzas = (respuesta === "Sí");
+                // Paso 3: Preguntar interés en finanzas (Ciencias Económicas)
+                botMessage("¿Te apasionan los números, la economía y las finanzas? 💰📊");
+                showOptions(["Sí", "No"], function (answer) {
+                    userData.finance = (answer === "Sí");
                     step++;
                     nextStep();
                 });
                 break;
 
             case 4:
-                botMessage("¿Te gustan las matemáticas y la lógica?");
-                showOptions(["Sí", "No"], (respuesta) => {
-                    userData.gustaMatematicas = (respuesta === "Sí");
+                // Paso 4: Preguntar interés en liderazgo (Administración de Empresas)
+                botMessage("¿Te emociona liderar y gestionar equipos? 👥🚀");
+                showOptions(["Sí", "No"], function (answer) {
+                    userData.leadership = (answer === "Sí");
                     step++;
                     nextStep();
                 });
                 break;
 
             case 5:
-                // Decidimos la carrera
-                userData.carrera = decidirCarrera();
-                botMessage(`Parece que podrías encajar bien en la carrera de ${userData.carrera}.`);
-                // Preguntamos el presupuesto
-                botMessage("¿Cuál es tu presupuesto?");
-                showOptions(["Bajo", "Medio", "Alto"], (respuesta) => {
-                    userData.presupuesto = respuesta.toLowerCase();
+                // Paso 5: Determinar la facultad a partir de las respuestas de aptitudes
+                let interests = [];
+                if (userData.health) interests.push("Medicina");
+                if (userData.tech) interests.push("Ingeniería");
+                if (userData.finance) interests.push("Ciencias Económicas");
+                if (userData.leadership) interests.push("Administración de Empresas");
+
+                if (interests.length === 0) {
+                    // Si no se marcó ninguna, se asigna por defecto Administración de Empresas
+                    userData.faculty = "Administración de Empresas";
                     step++;
                     nextStep();
-                });
+                } else if (interests.length === 1) {
+                    userData.faculty = interests[0];
+                    step++;
+                    nextStep();
+                } else {
+                    // Si hay más de una opción, se le pide al usuario que escoja
+                    botMessage(`¡Genial! Hemos notado que te interesan varias áreas: ${interests.join(", ")}. ¿Cuál te gustaría explorar más? 🌟`);
+                    showOptions(interests, function (answer) {
+                        userData.faculty = answer;
+                        step++;
+                        nextStep();
+                    });
+                }
                 break;
 
             case 6:
-                // Decidimos la universidad
-                userData.universidad = decidirUniversidad(userData.presupuesto);
-                botMessage(`Según tu presupuesto, te recomendamos la universidad: ${userData.universidad}.`);
-                // Preguntamos la jornada
-                botMessage("¿Qué jornada prefieres?");
-                showOptions(["Matutina", "Vespertina", "Nocturna"], (respuesta) => {
-                    userData.jornada = respuesta;
+                // Paso 6: Preguntar por la carrera específica según la facultad elegida
+                if (userData.faculty === "Medicina") {
+                    botMessage("En Medicina, ¿prefieres tratar pacientes de forma general o te interesa alguna especialidad en particular? 🤔👩‍⚕️👨‍⚕️");
+                    showOptions(["Medicina General 😷", "Cirugía ✂️", "Pediatría 👶", "Neurología 🧠"], function (answer) {
+                        userData.career = answer;
+                        step++;
+                        nextStep();
+                    });
+                } else if (userData.faculty === "Ingeniería") {
+                    botMessage("En el fascinante mundo de la Ingeniería, ¿qué área te apasiona más? 🚀");
+                    showOptions(["Ingeniería en Sistemas 💻", "Ingeniería Electrónica ⚡", "Ingeniería Civil 🏗️", "Ingeniería Industrial 📈"], function (answer) {
+                        userData.career = answer;
+                        step++;
+                        nextStep();
+                    });
+                } else if (userData.faculty === "Ciencias Económicas") {
+                    botMessage("Dentro de las Ciencias Económicas, ¿cuál de estas áreas te llama más la atención? 📊");
+                    showOptions(["Contaduría 🧾", "Economía 📈", "Finanzas 💸", "Administración de Empresas 🤝"], function (answer) {
+                        userData.career = answer;
+                        step++;
+                        nextStep();
+                    });
+                } else if (userData.faculty === "Administración de Empresas") {
+                    botMessage("En Administración de Empresas, ¿qué área te gustaría explorar? 📣");
+                    showOptions(["Marketing 📣", "Recursos Humanos 👥", "Finanzas Corporativas 💹", "Emprendimiento 🚀"], function (answer) {
+                        userData.career = answer;
+                        step++;
+                        nextStep();
+                    });
+                }
+                break;
+
+            case 7:
+                // Paso 7: Preguntar por el presupuesto para recomendar la universidad
+                botMessage("¡Cuéntame! ¿Cuál es tu presupuesto para tus estudios? 💵");
+                showOptions(["Bajo 💲", "Medio 💲💲", "Alto 💲💲💲"], function (answer) {
+                    // Removemos los emojis para la lógica interna
+                    userData.presupuesto = answer.split(" ")[0].toLowerCase();
                     step++;
                     nextStep();
                 });
                 break;
 
-            case 7:
-                // Recomendación final
-                botMessage(`🎓 ¡Recomendación Final para ${userData.nombre}!
-          📍 Universidad: ${userData.universidad}
-          📚 Carrera: ${userData.carrera}
-          ⏰ Jornada: ${userData.jornada}
-          `);
+            case 8:
+                // Paso 8: Preguntar por la jornada
+                botMessage("¿Qué jornada se adapta mejor a tu ritmo? ☀️🌙");
+                showOptions(["Matutina 🌞", "Vespertina 🌇", "Nocturna 🌙"], function (answer) {
+                    // Removemos los emojis para la lógica interna si es necesario
+                    userData.jornada = answer.split(" ")[0];
+                    step++;
+                    nextStep();
+                });
+                break;
+
+            case 9:
+                // Paso 9: Determinar la universidad y mostrar la recomendación final
+                userData.universidad = decideUniversity(userData.presupuesto);
+                botMessage(`🎓 ¡Recomendación Final para ${userData.nombre}!  
+  🏫 Universidad: ${userData.universidad}  
+  📚 Facultad: ${userData.faculty}  
+  🛠️ Carrera: ${userData.career}  
+  ⏰ Jornada: ${userData.jornada}`);
                 optionsBox.innerHTML = "";
                 break;
 
@@ -183,36 +208,38 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Botón de enviar (para capturar el nombre en el paso 0)
+    // Capturamos el nombre (paso 0) con el botón de enviar
     sendButton.addEventListener("click", function () {
         let inputText = userInput.value.trim();
-        if (inputText !== "") {
+        if (inputText !== "" && step === 0) {
             userMessage(inputText);
-            if (step === 0) {
+            userData.nombre = inputText;
+            userInput.value = "";
+            // Ocultar el prompt de texto y el botón después de capturar el nombre
+            userInput.style.display = "none";
+            sendButton.style.display = "none";
+            step++;
+            nextStep();
+        }
+    });
+
+    // También se permite enviar el nombre con la tecla Enter
+    userInput.addEventListener("keypress", function (event) {
+        if (event.key === "Enter" && step === 0) {
+            let inputText = userInput.value.trim();
+            if (inputText !== "") {
+                userMessage(inputText);
                 userData.nombre = inputText;
                 userInput.value = "";
+                // Ocultar el prompt de texto y el botón después de capturar el nombre
+                userInput.style.display = "none";
+                sendButton.style.display = "none";
                 step++;
                 nextStep();
             }
         }
     });
 
-    // Enter en el input (también para capturar el nombre en el paso 0)
-    userInput.addEventListener("keypress", function (event) {
-        if (event.key === "Enter") {
-            let inputText = userInput.value.trim();
-            if (inputText !== "") {
-                userMessage(inputText);
-                if (step === 0) {
-                    userData.nombre = inputText;
-                    userInput.value = "";
-                    step++;
-                    nextStep();
-                }
-            }
-        }
-    });
-
-    // Iniciamos el chatbot
+    // Iniciar el chatbot
     nextStep();
 });
