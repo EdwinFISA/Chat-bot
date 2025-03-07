@@ -182,8 +182,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             case 8:
                 // Paso 8: Preguntar por la jornada
-                botMessage("¿Qué horaria tiene libre? ☀️🌙");
-                showOptions(["Día 🌞", "Tarde 🌇", "Noche 🌙"], function (answer) {
+                botMessage("¿Qué jornada se adapta mejor a tu ritmo? ☀️🌙");
+                showOptions(["Matutina 🌞", "Vespertina 🌇", "Nocturna 🌙"], function (answer) {
                     // Removemos los emojis para la lógica interna si es necesario
                     userData.jornada = answer.split(" ")[0];
                     step++;

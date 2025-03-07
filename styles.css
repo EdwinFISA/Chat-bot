@@ -1,56 +1,76 @@
 /* Estilo general */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', Arial, sans-serif;
     background-color: #f4f4f4;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+    color: #333;
 }
 
 /* Contenedor principal */
 .chat-container {
     width: 400px;
     background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
     text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.chat-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
 }
 
 /* Título */
 h1 {
     font-family: 'Roboto', sans-serif;
-    font-size: 24px;
-    color: #333;
+    font-size: 28px;
+    color: #007BFF;
     margin-bottom: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
 /* Caja de chat */
 #chat-box {
     max-height: 300px;
     overflow-y: auto;
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+    margin-bottom: 15px;
     text-align: left;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 /* Contenedor de opciones */
 #options-box {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 /* Input y botón */
 input,
 button {
     width: calc(100% - 20px);
-    padding: 10px;
+    padding: 12px;
     margin-top: 10px;
     margin-bottom: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+    outline: none;
 }
 
 /* Botón "Enviar" */
@@ -59,17 +79,20 @@ button {
     color: white;
     cursor: pointer;
     border: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
 }
 
 /* Botón deshabilitado */
 button:disabled {
     background-color: #b0b0b0;
     cursor: not-allowed;
-}
-
-/* Hover en botón */
-button:hover {
-    background-color: #0056b3;
+    transform: none;
 }
 
 /* Botones de opción */
@@ -77,16 +100,48 @@ button:hover {
     background-color: #007bff;
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 12px 20px;
     margin: 5px;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 16px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 /* Hover en botones de opción */
 .option-btn:hover {
     background-color: #0056b3;
     transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Efecto al hacer clic en botones de opción */
+.option-btn:active {
+    transform: scale(0.95);
+}
+
+/* Estilo para mensajes en la caja de chat */
+.message {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 8px;
+    background-color: #e0e0e0;
+    color: #333;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.message.user {
+    background-color: #007BFF;
+    color: white;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.message.bot {
+    background-color: #f1f1f1;
+    color: #333;
+    align-self: flex-start;
+    margin-right: auto;
 }
