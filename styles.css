@@ -169,7 +169,10 @@ button:disabled {
     }
 }
 
-/* Fondo degradado */
+/* Fondo degradado e imagen */
 body {
-    background: linear-gradient(135deg, #ececec 0%, #5779e7 100%);
+    background: url('./images/fondo.png') no-repeat center center fixed, linear-gradient(135deg, #ececec 0%, #5779e7 100%);
+    background-size: cover; /* Asegura que la imagen cubra todo el fondo */
+    background-position: center; /* Centra la imagen */
+    background-attachment: fixed; /* Fija la imagen al fondo */
 }
