@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     // Función para decidir la universidad según presupuesto
-// Función para decidir la universidad según presupuesto
 function decideUniversity(presupuesto) {
     if (presupuesto === "bajo") return "USAC";
     else if (presupuesto === "medio") return "UMG";
