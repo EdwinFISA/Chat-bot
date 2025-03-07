@@ -11,12 +11,12 @@ document.addEventListener("DOMContentLoaded", function () {
     // Objeto para almacenar las respuestas del usuario
     let userData = {
         nombre: "",
-        health: false,      // Interés en salud (Medicina)
-        tech: false,        // Interés en tecnología (Ingeniería)
-        finance: false,     // Interés en finanzas (Ciencias Económicas)
-        leadership: false,  // Interés en liderazgo (Administración de Empresas)
-        faculty: "",
-        career: "",
+        salud: false,      // Interés en salud (Medicina)
+        tecno: false,        // Interés en tecnología (Ingeniería)
+        finanzas: false,     // Interés en finanzas (Ciencias Económicas)
+        liderazgo: false,  // Interés en liderazgo (Administración de Empresas)
+        facultad: "",
+        carrera: "",
         presupuesto: "",
         universidad: "",
         jornada: ""
@@ -26,8 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function decideUniversity(presupuesto) {
         if (presupuesto === "bajo") return "USAC";
         else if (presupuesto === "medio") return "UMG";
-        else if (presupuesto === "alto") return "Del Valle"; // O también podría ser Francisco Marroquín
-        else return "USAC";
+        else if (presupuesto === "alto") return "Del Valle o Francisco Marroquín"; 
     }
 
     // Función para mostrar mensajes del bot
@@ -73,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Paso 1: Preguntar interés en salud (Medicina)
                 botMessage("¿Te interesa cuidar la salud y el bienestar? 🏥💊");
                 showOptions(["Sí", "No"], function (answer) {
-                    userData.health = (answer === "Sí");
+                    userData.salud = (answer === "Sí");
                     step++;
                     nextStep();
                 });
@@ -83,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Paso 2: Preguntar interés en tecnología (Ingeniería)
                 botMessage("¿Te gusta programar o trabajar con tecnología? 💻🤖");
                 showOptions(["Sí", "No"], function (answer) {
-                    userData.tech = (answer === "Sí");
+                    userData.tecno = (answer === "Sí");
                     step++;
                     nextStep();
                 });
@@ -93,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Paso 3: Preguntar interés en finanzas (Ciencias Económicas)
                 botMessage("¿Te apasionan los números, la economía y las finanzas? 💰📊");
                 showOptions(["Sí", "No"], function (answer) {
-                    userData.finance = (answer === "Sí");
+                    userData.finanzas = (answer === "Sí");
                     step++;
                     nextStep();
                 });
@@ -103,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Paso 4: Preguntar interés en liderazgo (Administración de Empresas)
                 botMessage("¿Te emociona liderar y gestionar equipos? 👥🚀");
                 showOptions(["Sí", "No"], function (answer) {
-                    userData.leadership = (answer === "Sí");
+                    userData.liderazgo = (answer === "Sí");
                     step++;
                     nextStep();
                 });
@@ -112,25 +111,25 @@ document.addEventListener("DOMContentLoaded", function () {
             case 5:
                 // Paso 5: Determinar la facultad a partir de las respuestas de aptitudes
                 let interests = [];
-                if (userData.health) interests.push("Medicina");
-                if (userData.tech) interests.push("Ingeniería");
-                if (userData.finance) interests.push("Ciencias Económicas");
-                if (userData.leadership) interests.push("Administración de Empresas");
+                if (userData.salud) interests.push("Medicina");
+                if (userData.tecno) interests.push("Ingeniería");
+                if (userData.finanzas) interests.push("Ciencias Económicas");
+                if (userData.liderazgo) interests.push("Administración de Empresas");
 
                 if (interests.length === 0) {
                     // Si no se marcó ninguna, se asigna por defecto Administración de Empresas
-                    userData.faculty = "Administración de Empresas";
+                    userData.facultad = "Administración de Empresas";
                     step++;
                     nextStep();
                 } else if (interests.length === 1) {
-                    userData.faculty = interests[0];
+                    userData.facultad = interests[0];
                     step++;
                     nextStep();
                 } else {
                     // Si hay más de una opción, se le pide al usuario que escoja
                     botMessage(`¡Genial! Hemos notado que te interesan varias áreas: ${interests.join(", ")}. ¿Cuál te gustaría explorar más? 🌟`);
                     showOptions(interests, function (answer) {
-                        userData.faculty = answer;
+                        userData.facultad = answer;
                         step++;
                         nextStep();
                     });
@@ -139,31 +138,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
             case 6:
                 // Paso 6: Preguntar por la carrera específica según la facultad elegida
-                if (userData.faculty === "Medicina") {
+                if (userData.facultad === "Medicina") {
                     botMessage("En Medicina, ¿prefieres tratar pacientes de forma general o te interesa alguna especialidad en particular? 🤔👩‍⚕️👨‍⚕️");
                     showOptions(["Medicina General 😷", "Cirugía ✂️", "Pediatría 👶", "Neurología 🧠"], function (answer) {
-                        userData.career = answer;
+                        userData.carrera = answer;
                         step++;
                         nextStep();
                     });
-                } else if (userData.faculty === "Ingeniería") {
+                } else if (userData.facultad === "Ingeniería") {
                     botMessage("En el fascinante mundo de la Ingeniería, ¿qué área te apasiona más? 🚀");
                     showOptions(["Ingeniería en Sistemas 💻", "Ingeniería Electrónica ⚡", "Ingeniería Civil 🏗️", "Ingeniería Industrial 📈"], function (answer) {
-                        userData.career = answer;
+                        userData.carrera = answer;
                         step++;
                         nextStep();
                     });
-                } else if (userData.faculty === "Ciencias Económicas") {
+                } else if (userData.facultad === "Ciencias Económicas") {
                     botMessage("Dentro de las Ciencias Económicas, ¿cuál de estas áreas te llama más la atención? 📊");
                     showOptions(["Contaduría 🧾", "Economía 📈", "Finanzas 💸", "Administración de Empresas 🤝"], function (answer) {
-                        userData.career = answer;
+                        userData.carrera = answer;
                         step++;
                         nextStep();
                     });
-                } else if (userData.faculty === "Administración de Empresas") {
+                } else if (userData.facultad === "Administración de Empresas") {
                     botMessage("En Administración de Empresas, ¿qué área te gustaría explorar? 📣");
                     showOptions(["Marketing 📣", "Recursos Humanos 👥", "Finanzas Corporativas 💹", "Emprendimiento 🚀"], function (answer) {
-                        userData.career = answer;
+                        userData.carrera = answer;
                         step++;
                         nextStep();
                     });
@@ -183,8 +182,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             case 8:
                 // Paso 8: Preguntar por la jornada
-                botMessage("¿Qué jornada se adapta mejor a tu ritmo? ☀️🌙");
-                showOptions(["Matutina 🌞", "Vespertina 🌇", "Nocturna 🌙"], function (answer) {
+                botMessage("¿Qué horaria tiene libre? ☀️🌙");
+                showOptions(["Día 🌞", "Tarde 🌇", "Noche 🌙"], function (answer) {
                     // Removemos los emojis para la lógica interna si es necesario
                     userData.jornada = answer.split(" ")[0];
                     step++;
@@ -197,8 +196,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 userData.universidad = decideUniversity(userData.presupuesto);
                 botMessage(`🎓 ¡Recomendación Final para ${userData.nombre}!  
   🏫 Universidad: ${userData.universidad}  
-  📚 Facultad: ${userData.faculty}  
-  🛠️ Carrera: ${userData.career}  
+  📚 Facultad: ${userData.facultad}  
+  🛠️ Carrera: ${userData.carrera}  
   ⏰ Jornada: ${userData.jornada}`);
                 optionsBox.innerHTML = "";
                 break;
